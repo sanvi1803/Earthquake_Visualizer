@@ -1,89 +1,60 @@
 import React from "react";
 import { MoonIcon, SunIcon } from "lucide-react";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/context/ThemeContext";
 
-import { Button } from "@/components/ui/button";
+export default function ThemeToggleButton() {
+  const { theme, toggleTheme } = useTheme();
 
-import type { AnimationStart, AnimationVariant } from "./theme-animations";
-import { createAnimation } from "./theme-animations";
-interface ThemeToggleAnimationProps {
-  variant?: AnimationVariant;
-  start?: AnimationStart;
-  showLabel?: boolean;
-  url?: string;
-}
+  const handleThemeToggle = (e: React.MouseEvent) => {
+    // Get click position for the circle center
+    const x = e.clientX;
+    const y = e.clientY;
 
-export default function ThemeToggleButton({
-  variant = "circle-blur",
-  start = "top-left",
-  showLabel = false,
-  url = "",
-}: ThemeToggleAnimationProps) {
-  const { theme, setTheme } = useTheme();
+    // Set CSS variables for the circle position
+    document.documentElement.style.setProperty("--circle-x", `${x}px`);
+    document.documentElement.style.setProperty("--circle-y", `${y}px`);
 
-  const styleId = "theme-transition-styles";
+    if (document.startViewTransition) {
+      // Use View Transitions API for modern browsers
+      document.startViewTransition(() => {
+        toggleTheme();
+      });
+    } else {
+      // Fallback for browsers without View Transitions API
+      const transitionColor = theme === "light" ? "#1f2937" : "#ffffff";
+      document.documentElement.style.setProperty(
+        "--transition-color",
+        transitionColor
+      );
 
-  const updateStyles = React.useCallback((css: string, name: string) => {
-    if (typeof window === "undefined") return;
+      // Create and add the transition element
+      const transitionEl = document.createElement("div");
+      transitionEl.className = "theme-transition-circle";
+      document.body.appendChild(transitionEl);
 
-    let styleElement = document.getElementById(styleId) as HTMLStyleElement;
+      // Remove the element after animation
+      setTimeout(() => {
+        document.body.removeChild(transitionEl);
+      }, 800);
 
-    console.log("style ELement", styleElement);
-    console.log("name", name);
-
-    if (!styleElement) {
-      styleElement = document.createElement("style");
-      styleElement.id = styleId;
-      document.head.appendChild(styleElement);
+      // Toggle theme after a small delay
+      setTimeout(() => {
+        toggleTheme();
+      }, 100);
     }
-
-    styleElement.textContent = css;
-
-    console.log("content updated");
-  }, []);
-
-  const toggleTheme = React.useCallback(() => {
-    const animation = createAnimation(variant, start, url);
-
-    updateStyles(animation.css, animation.name);
-
-    if (typeof window === "undefined") return;
-
-    const switchTheme = () => {
-      setTheme(theme === "light" ? "dark" : "light");
-    };
-
-    if (!document.startViewTransition) {
-      switchTheme();
-      return;
-    }
-
-    document.startViewTransition(switchTheme);
-  }, [theme, setTheme]);
+  };
 
   return (
-    <Button
-      onClick={toggleTheme}
-      variant="ghost"
-      size="icon"
-      className="w-9 p-0 h-9 relative group"
-      name="Theme Toggle Button"
+    <button
+      onClick={handleThemeToggle}
+      className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl"
+      aria-label="Toggle theme"
     >
-      <SunIcon className="size-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <MoonIcon className="absolute size-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-      <span className="sr-only">Theme Toggle </span>
-      {showLabel && (
-        <>
-          <span className="hidden group-hover:block border rounded-full px-2 absolute -top-10">
-            {" "}
-            variant = {variant}
-          </span>
-          <span className="hidden group-hover:block border rounded-full px-2 absolute -bottom-10">
-            {" "}
-            start = {start}
-          </span>
-        </>
+      {theme === "dark" ? (
+        <SunIcon className="w-5 h-5 text-yellow-400 rotate-0 scale-100 transition-all duration-300" />
+      ) : (
+        <MoonIcon className="w-5 h-5 text-gray-800 rotate-0 scale-100 transition-all duration-300" />
       )}
-    </Button>
+    </button>
   );
 }

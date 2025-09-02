@@ -2,6 +2,7 @@ import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store";
 import "leaflet/dist/leaflet.css";
+import { useTheme } from "@/context/ThemeContext";
 
 const getColor = (mag: number) => {
   if (mag >= 5) return "#ef4444";
@@ -13,7 +14,7 @@ const getColor = (mag: number) => {
 
 export default function EarthquakeMap() {
   const { data, status } = useSelector((state: RootState) => state.earthquake);
-
+  const { theme } = useTheme();
   if (status === "loading")
     return (
       <div className="h-[70vh] w-full rounded-lg shadow-lg bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
@@ -31,7 +32,11 @@ export default function EarthquakeMap() {
     >
       <TileLayer
         attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        url={
+          theme === "dark"
+            ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        }
       />
       {data.features.map((feature: any) => (
         <CircleMarker
@@ -46,7 +51,7 @@ export default function EarthquakeMap() {
           stroke={false}
         >
           <Popup>
-            <div>
+            <div className="bg-white dark:bg-gray-900 dark:text-white rounded-xl shadow-2xl p-4 min-w-[280px] border border-gray-200 dark:border-gray-700">
               <div className="font-bold text-lg">
                 {feature.properties.title}
               </div>

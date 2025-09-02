@@ -1,74 +1,64 @@
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
-  }
-}
+/* Beautiful CSS Animations for Earthquake Visualizer */
 
-.animate-shimmer {
-  position: relative;
-  overflow: hidden;
-}
-.animate-shimmer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
-  transform: translateX(-100%);
-  animation: shimmer 1.5s infinite;
-}
-.theme-transition-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
-  background: var(--transition-bg, #fff);
-  animation: circle-reveal 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  will-change: clip-path;
+/* Enhanced circular theme transition */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: circle-reveal 1s cubic-bezier(0.4, 0, 0.2, 1);
+  clip-path: circle(0% at var(--circle-x, 50%) var(--circle-y, 50%));
 }
 
 @keyframes circle-reveal {
   0% {
-    clip-path: circle(0% at var(--x, 50%) var(--y, 50%));
+    clip-path: circle(0% at var(--circle-x, 50%) var(--circle-y, 50%));
   }
   100% {
-    clip-path: circle(150% at var(--x, 50%) var(--y, 50%));
+    clip-path: circle(200% at var(--circle-x, 50%) var(--circle-y, 50%));
   }
-}
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: circle-reveal 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-  clip-path: circle(0% at var(--circle-x, 50%) var(--circle-y, 50%));
-}
-@keyframes circle-reveal {
-  to {
-    clip-path: circle(150% at var(--circle-x, 50%) var(--circle-y, 50%));
-  }
-}
-/* Smooth circular theme transition */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: circle-reveal 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  clip-path: circle(0% at var(--circle-x, 50%) var(--circle-y, 50%));
 }
 
-@keyframes circle-reveal {
-  to {
-    clip-path: circle(150% at var(--circle-x, 50%) var(--circle-y, 50%));
+/* Alternative circular transition for browsers without View Transitions API */
+.theme-transition-circle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  background: radial-gradient(
+    circle at var(--circle-x, 50%) var(--circle-y, 50%),
+    var(--transition-color) 0%,
+    transparent 0%
+  );
+  animation: circle-expand 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes circle-expand {
+  0% {
+    background: radial-gradient(
+      circle at var(--circle-x, 50%) var(--circle-y, 50%),
+      var(--transition-color) 0%,
+      transparent 0%
+    );
+  }
+  100% {
+    background: radial-gradient(
+      circle at var(--circle-x, 50%) var(--circle-y, 50%),
+      var(--transition-color) 100%,
+      transparent 100%
+    );
   }
 }
 
 /* Floating animation for earthquake markers */
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .earthquake-marker {
@@ -77,11 +67,12 @@
 
 /* Pulse animation for high magnitude earthquakes */
 @keyframes pulse-glow {
-  0%, 100% { 
+  0%,
+  100% {
     box-shadow: 0 0 5px currentColor;
     transform: scale(1);
   }
-  50% { 
+  50% {
     box-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
     transform: scale(1.1);
   }
@@ -93,12 +84,16 @@
 
 /* Shimmer loading effect */
 @keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .shimmer::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -125,8 +120,12 @@
 
 /* Typing effect for titles */
 @keyframes typing {
-  from { width: 0; }
-  to { width: 100%; }
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
 }
 
 .typing-effect {
@@ -137,8 +136,13 @@
 
 /* Gradient text animation */
 @keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .gradient-text {
@@ -147,4 +151,174 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: gradient-shift 3s ease infinite;
+}
+
+/* Fade in animation for components */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Bounce animation for interactive elements */
+@keyframes bounce {
+  0%,
+  20%,
+  53%,
+  80%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%,
+  43% {
+    transform: translate3d(0, -30px, 0);
+  }
+  70% {
+    transform: translate3d(0, -15px, 0);
+  }
+  90% {
+    transform: translate3d(0, -4px, 0);
+  }
+}
+
+.bounce {
+  animation: bounce 1s;
+}
+
+/* Rotate animation for loading spinners */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate {
+  animation: rotate 2s linear infinite;
+}
+
+/* Custom Leaflet Popup Styling */
+.leaflet-popup-content-wrapper {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.leaflet-popup-tip {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.leaflet-popup-close-button {
+  color: #6b7280 !important;
+  font-size: 18px !important;
+  font-weight: bold !important;
+  padding: 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+.leaflet-popup-close-button:hover {
+  color: #ef4444 !important;
+  transform: scale(1.1) !important;
+}
+
+/* Enhanced scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Smooth transitions for all elements */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Enhanced focus states */
+button:focus,
+a:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Loading skeleton animation */
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+.dark .skeleton {
+  background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+  background-size: 200px 100%;
+}
+/* Outline text effect */
+.outline-text {
+  color: transparent;
+  -webkit-text-stroke: 2px currentColor;
+  text-stroke: 2px currentColor;
+}
+
+.outline-text-light {
+  color: transparent;
+  -webkit-text-stroke: 2px #000;
+  text-stroke: 2px #000;
+}
+
+.outline-text-dark {
+  color: transparent;
+  -webkit-text-stroke: 2px #fff;
+  text-stroke: 2px #fff;
 }
