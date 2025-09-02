@@ -1,77 +1,11 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { fetchEarthquakes } from "./slices/earthquakeSlice";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import EarthquakeMap from "./components/EarthquakeMap";
-import EarthquakeList from "./components/EarthquakeList";
-import { StatisticsDashboard } from "./components/StatisticsDashboard";
-import { FiltersPage } from "./components/FiltersPage";
-import { GoToTopButton } from "./components/GoToTopButton";
 import { useSelector } from "react-redux";
-import type { RootState } from "../src/store";
-import { useTheme } from "../src/context/ThemeContext";
+import type { RootState } from "../store";
+import { useTheme } from "../context/ThemeContext";
 import { BarChart3, TrendingUp, PieChart, Activity } from "lucide-react";
-import { TimeSeriesChart } from "../src/components/charts/TimeSeriesChart";
-import { MagnitudeDistributionChart } from "../src/components/charts/MagnitudeDistributionChart";
-import { DepthMagnitudeChart } from "../src/components/charts/DepthMagnitudeChart";
-import { GeographicDistributionChart } from "../src/components/charts/GeographicDistributionChart";
-
-export default function App() {
-  const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState("visualizer");
-
-  useEffect(() => {
-    dispatch(fetchEarthquakes() as any);
-  }, [dispatch]);
-
-  const handleNavigate = (page: string) => {
-    setCurrentPage(page);
-  };
-
-  const renderContent = () => {
-    switch (currentPage) {
-      case "filters":
-        return <FiltersPage />;
-      case "charts":
-        return <ChartVisualization />;
-      case "statistics":
-        return (
-          <div className="max-w-7xl mx-auto w-full px-4 py-8 fade-in-up">
-            <StatisticsDashboard />
-          </div>
-        );
-      case "visualizer":
-      default:
-        return (
-          <main className="max-w-7xl mx-auto w-full px-4 py-8 fade-in-up">
-            <div className="rounded-3xl bg-white/80 dark:bg-black/60 shadow-2xl p-6 backdrop-blur-sm border border-gray-200 dark:border-gray-800">
-              <EarthquakeMap />
-            </div>
-
-            <h2 className="mt-12 mb-6 text-3xl font-bold text-gray-800 dark:text-gray-200 text-center fade-in-up">
-              Recent Earthquakes
-            </h2>
-
-            <EarthquakeList />
-          </main>
-        );
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 dark:from-gray-950 dark:via-gray-900 dark:to-black text-gray-900 dark:text-white transition-colors duration-500">
-      <Header currentPage={currentPage} onNavigate={handleNavigate} />
-
-      {renderContent()}
-
-      <Footer />
-
-      {/* Go to Top Button */}
-      <GoToTopButton />
-    </div>
-  );
-}
+import { TimeSeriesChart } from "./charts/TimeSeriesChart";
+import { MagnitudeDistributionChart } from "./charts/MagnitudeDistributionChart";
+import { DepthMagnitudeChart } from "./charts/DepthMagnitudeChart";
+import { GeographicDistributionChart } from "./charts/GeographicDistributionChart";
 
 export const ChartVisualization = () => {
   const { data } = useSelector((state: RootState) => state.earthquake);

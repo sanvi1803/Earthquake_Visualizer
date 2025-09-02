@@ -322,3 +322,38 @@ a:focus {
   -webkit-text-stroke: 2px #fff;
   text-stroke: 2px #fff;
 }
+
+/* ... existing styles ... */
+
+/* Custom Cluster Icon Styles */
+.custom-cluster-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.custom-cluster-icon div {
+  transition: all 0.3s ease;
+}
+
+.custom-cluster-icon:hover div {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Cluster Animation */
+.leaflet-cluster-anim .leaflet-marker-icon,
+.leaflet-cluster-anim .leaflet-marker-shadow {
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.leaflet-cluster-anim .leaflet-cluster-anim-icon {
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+/* Cluster Coverage */
+.leaflet-cluster-coverage {
+  background: rgba(59, 130, 246, 0.1);
+  border: 2px dashed rgba(59, 130, 246, 0.3);
+  border-radius: 50%;
+  pointer-events: none;
+}

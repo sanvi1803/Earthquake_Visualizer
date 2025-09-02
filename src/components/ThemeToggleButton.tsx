@@ -72,7 +72,7 @@ export default function ThemeToggleButton() {
   return (
     <button
       onClick={handleThemeToggle}
-      className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl"
+      className="w-10 h-10 flex items-center cursor-pointer justify-center rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl"
       aria-label="Toggle theme"
     >
       {theme === "dark" ? (

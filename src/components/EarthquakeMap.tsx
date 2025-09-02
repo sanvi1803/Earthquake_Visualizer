@@ -1,8 +1,16 @@
-import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  CircleMarker,
+  Popup,
+  useMapEvents,
+  Marker,
+} from "react-leaflet";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store";
 import "leaflet/dist/leaflet.css";
 import { useTheme } from "@/context/ThemeContext";
+import { useState } from "react";
 
 const getColor = (mag: number) => {
   if (mag >= 5) return "#ef4444";
@@ -11,6 +19,24 @@ const getColor = (mag: number) => {
   if (mag >= 1) return "#34d399";
   return "#60a5fa";
 };
+function LocationMarker() {
+  const [position, setPosition] = useState<L.LatLng | null>(null);
+  const map = useMapEvents({
+    click() {
+      map.locate();
+    },
+    locationfound(e) {
+      setPosition(e.latlng);
+      map.flyTo(e.latlng, map.getZoom());
+    },
+  });
+
+  return position === null ? null : (
+    <Marker position={position} opacity={0.4}>
+      <Popup>You are here</Popup>
+    </Marker>
+  );
+}
 
 export default function EarthquakeMap() {
   const { data, status } = useSelector((state: RootState) => state.earthquake);
@@ -31,7 +57,7 @@ export default function EarthquakeMap() {
       className="h-[70vh] w-full rounded-lg shadow-lg "
     >
       <TileLayer
-        attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+        attribution=""
         url={
           theme === "dark"
             ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
@@ -47,11 +73,11 @@ export default function EarthquakeMap() {
           ]}
           radius={Math.max(4, feature.properties.mag * 3)}
           color={getColor(feature.properties.mag)}
-          fillOpacity={0.7}
+          fillOpacity={0.6}
           stroke={false}
         >
           <Popup>
-            <div className="bg-white dark:bg-gray-900 dark:text-white rounded-xl shadow-2xl p-4 min-w-[280px] border border-gray-200 dark:border-gray-700">
+            <div>
               <div className="font-bold text-lg">
                 {feature.properties.title}
               </div>
@@ -79,6 +105,8 @@ export default function EarthquakeMap() {
           </Popup>
         </CircleMarker>
       ))}
+      <LocationMarker />
     </MapContainer>
   );
 }
+
