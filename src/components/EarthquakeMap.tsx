@@ -15,7 +15,11 @@ export default function EarthquakeMap() {
   const { data, status } = useSelector((state: RootState) => state.earthquake);
 
   if (status === "loading")
-    return <div className="text-center py-8">Loading map...</div>;
+    return (
+      <div className="h-[70vh] w-full rounded-lg shadow-lg bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
+        <div className="w-full h-full rounded-lg bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 dark:from-gray-700 dark:via-gray-800 dark:to-gray-700 animate-shimmer" />
+      </div>
+    );
   if (!data) return <div className="text-center py-8">No data available.</div>;
 
   return (
@@ -23,7 +27,7 @@ export default function EarthquakeMap() {
       center={[20, 0]}
       zoom={2}
       scrollWheelZoom
-      className="h-[70vh] w-full rounded-lg shadow-lg"
+      className="h-[70vh] w-full rounded-lg shadow-lg "
     >
       <TileLayer
         attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -65,7 +69,7 @@ export default function EarthquakeMap() {
                 className="inline-block mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition"
               >
                 More info
-              </a>  
+              </a>
             </div>
           </Popup>
         </CircleMarker>

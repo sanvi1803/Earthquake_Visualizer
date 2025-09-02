@@ -1,15 +1,15 @@
 // src/components/Header.tsx
-import ThemeToggleButton from "./ui/theme-toggle-button";
+import { Globe } from "lucide-react";
+import ThemeToggleButton from "./ThemeToggleButton";
 
 export default function Header() {
   return (
-    <header className="w-full bg-gradient-to-r from-blue-900 via-indigo-900 to-black shadow-lg py-8 px-4 flex flex-col items-center rounded-b-2xl">
+    <header className="w-full bg-gradient-to-r dark:from-gray-950 dark:via-gray-900 dark:to-black shadow-lg py-6 px-4 flex flex-col items-center ">
       <div className="flex flex-col items-center gap-2">
-        <span className="text-6xl">🌍</span>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white drop-shadow-lg tracking-tight">
-          Earthquake Visualizer
+        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 dark:text-white dark:drop-shadow-lg drop-shadow-md tracking-tight">
+          Earthquake Visualizer <Globe className="size-10 inline-block animate-spin" />
         </h1>
-        <p className="text-lg text-blue-200 mt-2">
+        <p className="text-lg text-blue-800 dark:text-blue-200 mt-2">
           Explore recent global earthquake activity interactively.
         </p>
       </div>

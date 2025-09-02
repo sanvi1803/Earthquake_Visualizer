@@ -1,0 +1,150 @@
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.animate-shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: shimmer 1.5s infinite;
+}
+.theme-transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: var(--transition-bg, #fff);
+  animation: circle-reveal 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  will-change: clip-path;
+}
+
+@keyframes circle-reveal {
+  0% {
+    clip-path: circle(0% at var(--x, 50%) var(--y, 50%));
+  }
+  100% {
+    clip-path: circle(150% at var(--x, 50%) var(--y, 50%));
+  }
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: circle-reveal 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  clip-path: circle(0% at var(--circle-x, 50%) var(--circle-y, 50%));
+}
+@keyframes circle-reveal {
+  to {
+    clip-path: circle(150% at var(--circle-x, 50%) var(--circle-y, 50%));
+  }
+}
+/* Smooth circular theme transition */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: circle-reveal 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  clip-path: circle(0% at var(--circle-x, 50%) var(--circle-y, 50%));
+}
+
+@keyframes circle-reveal {
+  to {
+    clip-path: circle(150% at var(--circle-x, 50%) var(--circle-y, 50%));
+  }
+}
+
+/* Floating animation for earthquake markers */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.earthquake-marker {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Pulse animation for high magnitude earthquakes */
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 5px currentColor;
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
+    transform: scale(1.1);
+  }
+}
+
+.magnitude-high {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Shimmer loading effect */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Typing effect for titles */
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+.typing-effect {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 2s steps(40, end);
+}
+
+/* Gradient text animation */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.gradient-text {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 3s ease infinite;
+}
