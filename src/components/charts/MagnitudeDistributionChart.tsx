@@ -9,6 +9,7 @@ import {
   Legend,
 } from "chart.js";
 
+// Register the chart components needed for Bar charts
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -18,6 +19,7 @@ ChartJS.register(
   Legend
 );
 
+// Props definition: earthquake dataset + theme (light/dark)
 interface MagnitudeDistributionChartProps {
   earthquakes: any[];
   theme: string;
@@ -27,7 +29,8 @@ export const MagnitudeDistributionChart = ({
   earthquakes,
   theme,
 }: MagnitudeDistributionChartProps) => {
-  // Group earthquakes by magnitude ranges
+  //   Initialize magnitude ranges (buckets)
+  // Each key stores how many earthquakes fall in that range
   const magnitudeRanges = {
     "0-1": 0,
     "1-2": 0,
@@ -37,6 +40,7 @@ export const MagnitudeDistributionChart = ({
     "5+": 0,
   };
 
+  //   Loop through each earthquake and increment the right bucket
   earthquakes.forEach((earthquake: any) => {
     const mag = earthquake.properties.mag;
     if (mag < 1) magnitudeRanges["0-1"]++;
@@ -47,12 +51,14 @@ export const MagnitudeDistributionChart = ({
     else magnitudeRanges["5+"]++;
   });
 
+  //   Prepare chart dataset from grouped values
   const chartData = {
-    labels: Object.keys(magnitudeRanges),
+    labels: Object.keys(magnitudeRanges), // x-axis → magnitude ranges
     datasets: [
       {
         label: "Number of Earthquakes",
-        data: Object.values(magnitudeRanges),
+        data: Object.values(magnitudeRanges), // y-axis → count in each range
+        // Different colors for each bar to visually separate ranges
         backgroundColor: [
           "rgba(59, 130, 246, 0.8)", // Blue
           "rgba(34, 197, 94, 0.8)", // Green
@@ -70,26 +76,29 @@ export const MagnitudeDistributionChart = ({
           "rgba(147, 51, 234, 1)",
         ],
         borderWidth: 2,
-        borderRadius: 8,
-        borderSkipped: false,
+        borderRadius: 8, // Rounded corners for bars
+        borderSkipped: false, // Ensures full rounded bars
       },
     ],
   };
 
+  //   Chart options: responsiveness, theming, tooltips, axis labels
   const options = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false,
+        display: false, // Hide legend since it's self-explanatory
       },
       tooltip: {
+        // Tooltip adapts colors to theme
         backgroundColor: theme === "dark" ? "#1f2937" : "#ffffff",
         titleColor: theme === "dark" ? "#f3f4f6" : "#374151",
         bodyColor: theme === "dark" ? "#f3f4f6" : "#374151",
         borderColor: theme === "dark" ? "#374151" : "#d1d5db",
         borderWidth: 1,
         callbacks: {
+          // Custom tooltip: shows count instead of raw value
           label: (context: any) => `Count: ${context.parsed.y}`,
         },
       },
@@ -99,7 +108,7 @@ export const MagnitudeDistributionChart = ({
         display: true,
         title: {
           display: true,
-          text: "Magnitude Range",
+          text: "Magnitude Range", // Label for X-axis
           color: theme === "dark" ? "#f3f4f6" : "#374151",
         },
         ticks: {
@@ -113,12 +122,12 @@ export const MagnitudeDistributionChart = ({
         display: true,
         title: {
           display: true,
-          text: "Number of Earthquakes",
+          text: "Number of Earthquakes", // Label for Y-axis
           color: theme === "dark" ? "#f3f4f6" : "#374151",
         },
         ticks: {
           color: theme === "dark" ? "#9ca3af" : "#6b7280",
-          beginAtZero: true,
+          beginAtZero: true, // Ensure axis starts at 0
         },
         grid: {
           color: theme === "dark" ? "#374151" : "#e5e7eb",
@@ -129,6 +138,7 @@ export const MagnitudeDistributionChart = ({
 
   return (
     <div className="h-80 w-full">
+      {/* Render bar chart with data and options */}
       <Bar data={chartData} options={options} />
     </div>
   );
