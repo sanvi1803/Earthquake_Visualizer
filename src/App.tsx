@@ -1,165 +1,80 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { fetchEarthquakes } from "./slices/earthquakeSlice";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import EarthquakeMap from "./components/EarthquakeMap";
-import EarthquakeList from "./components/EarthquakeList";
-import { StatisticsDashboard } from "./components/StatisticsDashboard";
-import { FiltersPage } from "./components/FiltersPage";
-import { GoToTopButton } from "./components/GoToTopButton";
-import { useSelector } from "react-redux";
-import type { RootState } from "../src/store";
-import { useTheme } from "../src/context/ThemeContext";
-import { BarChart3, TrendingUp, PieChart, Activity } from "lucide-react";
-import { TimeSeriesChart } from "../src/components/charts/TimeSeriesChart";
-import { MagnitudeDistributionChart } from "../src/components/charts/MagnitudeDistributionChart";
-import { DepthMagnitudeChart } from "../src/components/charts/DepthMagnitudeChart";
-import { GeographicDistributionChart } from "../src/components/charts/GeographicDistributionChart";
-
+import { Header } from "./components/shared/Header";
+import { Footer } from "./components/shared/Footer";
+import { EarthquakeMap } from "./components/earthquakes/EarthquakeMap";
+import { EarthquakeList } from "./components/earthquakes/EarthquakeList";
+import { StatisticsDashboard } from "./components/statistics/StatisticsDashboard";
+import { FiltersPage } from "./components/filter/FiltersPage";
+import { GoToTopButton } from "./components/shared/GoToTopButton";
+import { ChartVisualization } from "./components/charts/ChartVisualization";
+import Lenis from "lenis";
 export default function App() {
   const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState("visualizer");
 
   useEffect(() => {
     dispatch(fetchEarthquakes() as any);
   }, [dispatch]);
 
-  const handleNavigate = (page: string) => {
-    setCurrentPage(page);
-  };
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      smoothWheel: true,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      syncTouch: true,
+      autoResize: true,
+    });
 
-  const renderContent = () => {
-    switch (currentPage) {
-      case "filters":
-        return <FiltersPage />;
-      case "charts":
-        return <ChartVisualization />;
-      case "statistics":
-        return (
-          <div className="max-w-7xl mx-auto w-full px-4 py-8 fade-in-up">
-            <StatisticsDashboard />
-          </div>
-        );
-      case "visualizer":
-      default:
-        return (
-          <main className="max-w-7xl mx-auto w-full px-4 py-8 fade-in-up">
-            <div className="rounded-3xl bg-white/80 dark:bg-black/60 shadow-2xl p-6 backdrop-blur-sm border border-gray-200 dark:border-gray-800">
-              <EarthquakeMap />
-            </div>
-
-            <h2 className="mt-12 mb-6 text-3xl font-bold text-gray-800 dark:text-gray-200 text-center fade-in-up">
-              Recent Earthquakes
-            </h2>
-
-            <EarthquakeList />
-          </main>
-        );
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
     }
-  };
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 dark:from-gray-950 dark:via-gray-900 dark:to-black text-gray-900 dark:text-white transition-colors duration-500">
-      <Header currentPage={currentPage} onNavigate={handleNavigate} />
+    <BrowserRouter>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:via-gray-900 dark:to-black text-gray-900 dark:text-white transition-colors duration-500">
+        <Header />
 
-      {renderContent()}
+        <Routes>
+          <Route path="/" element={<Navigate to="/visualizer" replace />} />
+          <Route
+            path="/visualizer"
+            element={
+              <main className="max-w-7xl mx-auto w-full px-4 py-8 fade-in-up">
+                <div className="rounded-3xl bg-white/80 dark:bg-black/60 shadow-2xl p-6 backdrop-blur-sm border border-gray-200 dark:border-gray-800">
+                  <EarthquakeMap />
+                </div>
+                <h2 className="mt-12 mb-6 text-3xl font-bold text-gray-800 dark:text-gray-200 text-center fade-in-up">
+                  Recent Earthquakes
+                </h2>
+                <EarthquakeList showFilters={false} />
+              </main>
+            }
+          />
+          <Route path="/charts" element={<ChartVisualization />} />
+          <Route
+            path="/statistics"
+            element={
+              <div className="max-w-7xl mx-auto w-full px-4 py-8 fade-in-up">
+                <StatisticsDashboard />
+              </div>
+            }
+          />
+          <Route path="/adv-filters" element={<FiltersPage />} />
+        </Routes>
 
-      <Footer />
-
-      {/* Go to Top Button */}
-      <GoToTopButton />
-    </div>
+        <Footer />
+        <GoToTopButton />
+      </div>
+    </BrowserRouter>
   );
 }
-
-export const ChartVisualization = () => {
-  const { data } = useSelector((state: RootState) => state.earthquake);
-  const { theme } = useTheme();
-
-  if (!data?.features) return null;
-
-  const earthquakes = data.features;
-
-  return (
-    <div className="max-w-7xl mx-auto w-full px-4 py-8 fade-in-up">
-      {/* Page Header */}
-      <div className="text-center mb-8">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <BarChart3 className="w-8 h-8 text-blue-500" />
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-            Chart Visualizations
-          </h1>
-        </div>
-        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          Explore earthquake data through interactive charts and graphs. Analyze
-          temporal patterns, magnitude distributions, and geographic trends to
-          understand seismic activity.
-        </p>
-      </div>
-
-      {/* Charts Grid */}
-      <div className="space-y-8">
-        {/* Time Series Chart */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <TrendingUp className="w-5 h-5 text-green-500" />
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Earthquake Frequency Over Time
-            </h2>
-          </div>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-            Daily earthquake frequency showing temporal patterns and trends.
-          </p>
-          <TimeSeriesChart earthquakes={earthquakes} theme={theme} />
-        </div>
-
-        {/* Magnitude Distribution Chart */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <PieChart className="w-5 h-5 text-blue-500" />
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Magnitude Distribution
-            </h2>
-          </div>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-            Distribution of earthquakes by magnitude range (Gutenberg-Richter
-            law).
-          </p>
-          <MagnitudeDistributionChart earthquakes={earthquakes} theme={theme} />
-        </div>
-
-        {/* Depth vs Magnitude Chart */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Activity className="w-5 h-5 text-purple-500" />
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Depth vs Magnitude Analysis
-            </h2>
-          </div>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-            Relationship between earthquake depth and magnitude.
-          </p>
-          <DepthMagnitudeChart earthquakes={earthquakes} theme={theme} />
-        </div>
-
-        {/* Geographic Distribution Chart */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <BarChart3 className="w-5 h-5 text-orange-500" />
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Geographic Distribution
-            </h2>
-          </div>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-            Earthquake count by geographic region/country.
-          </p>
-          <GeographicDistributionChart
-            earthquakes={earthquakes}
-            theme={theme}
-          />
-        </div>
-      </div>
-    </div>
-  );
-};

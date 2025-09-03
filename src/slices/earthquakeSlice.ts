@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const API_URL =
-  "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
+const API_URL = import.meta.env.VITE_USGS_API_URL;
 
 export const fetchEarthquakes = createAsyncThunk(
   "earthquake/fetchEarthquakes",

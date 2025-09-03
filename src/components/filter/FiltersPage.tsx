@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
-import type { RootState } from "../store";
-import EarthquakeList from "./EarthquakeList";
+import type { RootState } from "../../store";
+import { EarthquakeList } from "../earthquakes/EarthquakeList";
 import { Filter, Search, List } from "lucide-react";
 
 export const FiltersPage = () => {
@@ -14,7 +14,7 @@ export const FiltersPage = () => {
       <div className="text-center mb-8">
         <div className="flex items-center justify-center gap-3 mb-4">
           <Filter className="w-8 h-8 text-blue-500" />
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-4xl font-bold text-gray-700 dark:text-white">
             Advanced Filters
           </h1>
         </div>
@@ -26,9 +26,9 @@ export const FiltersPage = () => {
       </div>
 
       {/* Filters Section */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6 mb-8">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 p-6 mb-8">
         <div className="flex items-center gap-2 mb-4">
-          <Filter className="w-5 h-5 text-blue-500" />
+          {/* <Filter className="w-5 h-5 text-blue-500" /> */}
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
             Filter Controls
           </h2>
@@ -39,7 +39,7 @@ export const FiltersPage = () => {
         </p>
 
         {/* Earthquake List with Filters */}
-        <EarthquakeList showFilters={true} showSearch={true} />
+        <EarthquakeList showFilters={true} showSearch={false} />
       </div>
 
       {/* Features Overview */}

@@ -1,16 +1,9 @@
-import {
-  MapContainer,
-  TileLayer,
-  CircleMarker,
-  Popup,
-  useMapEvents,
-  Marker,
-} from "react-leaflet";
-import { useSelector } from "react-redux";
-import type { RootState } from "../store";
 import "leaflet/dist/leaflet.css";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../store";
 import { useTheme } from "@/context/ThemeContext";
-import { useState } from "react";
+import { LocationMarker } from "../shared/LocationMarker";
+import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet";
 
 const getColor = (mag: number) => {
   if (mag >= 5) return "#ef4444";
@@ -19,26 +12,8 @@ const getColor = (mag: number) => {
   if (mag >= 1) return "#34d399";
   return "#60a5fa";
 };
-function LocationMarker() {
-  const [position, setPosition] = useState<L.LatLng | null>(null);
-  const map = useMapEvents({
-    click() {
-      map.locate();
-    },
-    locationfound(e) {
-      setPosition(e.latlng);
-      map.flyTo(e.latlng, map.getZoom());
-    },
-  });
 
-  return position === null ? null : (
-    <Marker position={position} opacity={0.4}>
-      <Popup>You are here</Popup>
-    </Marker>
-  );
-}
-
-export default function EarthquakeMap() {
+export const EarthquakeMap = () => {
   const { data, status } = useSelector((state: RootState) => state.earthquake);
   const { theme } = useTheme();
   if (status === "loading")
@@ -52,7 +27,7 @@ export default function EarthquakeMap() {
   return (
     <MapContainer
       center={[20, 0]}
-      zoom={2}
+      zoom={3}
       scrollWheelZoom
       className="h-[70vh] w-full rounded-lg shadow-lg "
     >
@@ -71,7 +46,7 @@ export default function EarthquakeMap() {
             feature.geometry.coordinates[1],
             feature.geometry.coordinates[0],
           ]}
-          radius={Math.max(4, feature.properties.mag * 3)}
+          radius={Math.max(4, feature.properties.mag * 2.5)}
           color={getColor(feature.properties.mag)}
           fillOpacity={0.6}
           stroke={false}
@@ -108,5 +83,4 @@ export default function EarthquakeMap() {
       <LocationMarker />
     </MapContainer>
   );
-}
-
+};

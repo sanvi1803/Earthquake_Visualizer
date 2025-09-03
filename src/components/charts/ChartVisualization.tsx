@@ -1,11 +1,17 @@
 import { useSelector } from "react-redux";
-import type { RootState } from "../store";
-import { useTheme } from "../context/ThemeContext";
-import { BarChart3, TrendingUp, PieChart, Activity } from "lucide-react";
-import { TimeSeriesChart } from "./charts/TimeSeriesChart";
-import { MagnitudeDistributionChart } from "./charts/MagnitudeDistributionChart";
-import { DepthMagnitudeChart } from "./charts/DepthMagnitudeChart";
-import { GeographicDistributionChart } from "./charts/GeographicDistributionChart";
+import type { RootState } from "../../store";
+import { useTheme } from "../../context/ThemeContext";
+import {
+  BarChart3,
+  TrendingUp,
+  PieChart,
+  Activity,
+  PieChartIcon,
+} from "lucide-react";
+import { TimeSeriesChart } from "./TimeSeriesChart";
+import { MagnitudeDistributionChart } from "./MagnitudeDistributionChart";
+import { DepthMagnitudeChart } from "./DepthMagnitudeChart";
+import { GeographicDistributionChart } from "./GeographicDistributionChart";
 
 export const ChartVisualization = () => {
   const { data } = useSelector((state: RootState) => state.earthquake);
@@ -20,8 +26,8 @@ export const ChartVisualization = () => {
       {/* Page Header */}
       <div className="text-center mb-8">
         <div className="flex items-center justify-center gap-3 mb-4">
-          <BarChart3 className="w-8 h-8 text-blue-500" />
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+          <PieChartIcon className="w-8 h-8 text-blue-500" />
+          <h1 className="text-4xl font-bold text-gray-700 dark:text-white">
             Chart Visualizations
           </h1>
         </div>
@@ -35,7 +41,7 @@ export const ChartVisualization = () => {
       {/* Charts Grid */}
       <div className="space-y-8">
         {/* Time Series Chart */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
+        <div className="chart-card">
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp className="w-5 h-5 text-green-500" />
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -49,7 +55,7 @@ export const ChartVisualization = () => {
         </div>
 
         {/* Magnitude Distribution Chart */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
+        <div className="chart-card">
           <div className="flex items-center gap-2 mb-4">
             <PieChart className="w-5 h-5 text-blue-500" />
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -64,7 +70,7 @@ export const ChartVisualization = () => {
         </div>
 
         {/* Depth vs Magnitude Chart */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
+        <div className="chart-card">
           <div className="flex items-center gap-2 mb-4">
             <Activity className="w-5 h-5 text-purple-500" />
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -78,7 +84,7 @@ export const ChartVisualization = () => {
         </div>
 
         {/* Geographic Distribution Chart */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
+        <div className="chart-card">
           <div className="flex items-center gap-2 mb-4">
             <BarChart3 className="w-5 h-5 text-orange-500" />
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white">

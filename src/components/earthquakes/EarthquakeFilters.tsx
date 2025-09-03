@@ -59,7 +59,7 @@ export const EarthquakeFilters = ({
           {hasActiveFilters && (
             <button
               onClick={onClearFilters}
-              className="text-sm text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 flex items-center gap-1"
+              className="text-sm text-red-500 cursor-pointer hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 flex items-center gap-1"
             >
               <X className="w-4 h-4" />
               Clear All
@@ -67,7 +67,7 @@ export const EarthquakeFilters = ({
           )}
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+            className="text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 cursor-pointer"
           >
             {isExpanded ? "Hide" : "Show"} Filters
           </button>
