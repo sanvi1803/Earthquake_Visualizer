@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Filter, X, Calendar, MapPin, Zap } from "lucide-react";
 
 export interface FilterOptions {

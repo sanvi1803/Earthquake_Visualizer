@@ -42,10 +42,14 @@ export const Header = () => {
           {/* Left Side - Navigation */}
           <div className="flex items-center space-x-8">
             {/* Logo/Title */}
-            <div className="flex items-center space-x-3">
-              <Earth className="size-8 text-blue-600 dark:text-blue-400" />
+            <div className="flex items-center space-x-.5">
+              <img
+                src="/Earthquake_Visualizer_NoBg.png"
+                alt=""
+                className="h-15"
+              />
               <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-                Seismic
+                Seismovis
               </h1>
             </div>
 
