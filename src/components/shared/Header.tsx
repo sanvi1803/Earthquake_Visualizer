@@ -1,4 +1,4 @@
-import { Globe, Filter, BarChart3, PieChart, Earth } from "lucide-react";
+import { Globe, Filter, BarChart3, PieChart } from "lucide-react";
 import ThemeToggleButton from "../ui/ThemeToggleButton";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
